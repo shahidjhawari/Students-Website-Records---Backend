@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
     formBay : {
         type : Number,
         require : true
+    },
+    image : {
+        type : String,
+        require : true
     }
 });
 
