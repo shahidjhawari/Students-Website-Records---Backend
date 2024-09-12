@@ -6,29 +6,24 @@ const registerController = async (req, res) => {
     try {
         const { name, fatherName, rollNumber, grade, formBay } = req.body;
 
-        // Check if a file is uploaded
         let imageUrl = "";
         if (req.file) {
-            // Upload the image to Cloudinary
             const result = await cloudinary.uploader.upload(req.file.path, {
-                folder: "uploads"  // Cloudinary folder to store images
+                folder: "uploads" 
             });
 
-            // Store the secure URL from Cloudinary
             imageUrl = result.secure_url;
 
-            // Remove the file from the server after uploading to Cloudinary
             fs.unlinkSync(req.file.path);
         }
 
-        // Create a new user with the uploaded image URL
         const newUser = await User.create({
             name,
             fatherName,
             rollNumber,
             grade,
             formBay,
-            image: imageUrl  // Store image URL in the database
+            image: imageUrl 
         });
 
         res.status(201).json({
