@@ -3,6 +3,6 @@ const getUser = express.Router();
 const  getController  = require("../controllers/get-controller");
 
 
-getUser.get("/get/:id", getController);
+getUser.get("/get", getController);
 
 module.exports = getUser

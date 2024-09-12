@@ -6,6 +6,15 @@ const update = require("./router/update-router");
 const deleteUser = require("./router/delete-router");
 const getUser = require("./router/get-router");
 const connection = require("./db/connection");
+const cors = require("cors");
+
+app.use(cors());
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', "PATCH"],
+};
 
 app.use(express.json());
 app.use("/api", router);

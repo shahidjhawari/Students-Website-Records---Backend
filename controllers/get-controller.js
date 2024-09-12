@@ -2,9 +2,8 @@ const User = require("../models/register-model");
 
 const getController = async (req, res) => {
     try {     
-        const { id } = req.params;
         
-        const getUser = await User.findById(id);
+        const getUser = await User.find();
 
         res.status(200).json({
             message: "User found successfully",
