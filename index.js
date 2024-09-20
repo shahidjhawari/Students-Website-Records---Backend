@@ -22,7 +22,6 @@ app.use("/api", update);
 app.use("/api", deleteUser);
 app.use("/api", getUser);
 
-
 const port = process.env.PORT;
 
 app.use("/api", router);
