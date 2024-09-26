@@ -5,6 +5,7 @@ const router = require("./router/register-router");
 const update = require("./router/update-router");
 const deleteUser = require("./router/delete-router");
 const getUser = require("./router/get-router");
+const getAllUser = require("./router/getAll-router");
 const connection = require("./db/connection");
 const cors = require("cors");
 
@@ -21,6 +22,7 @@ app.use("/api", router);
 app.use("/api", update);
 app.use("/api", deleteUser);
 app.use("/api", getUser);
+app.use("/api", getAllUser);
 
 
 const port = process.env.PORT;
