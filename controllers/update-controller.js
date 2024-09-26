@@ -1,38 +1,44 @@
-const express = require("express");
-const multer = require("multer");
 const User = require("../models/register-model");
-
-const storage = multer.memoryStorage(); // or configure diskStorage for file uploads
-const upload = multer({ storage });
+const cloudinary = require("../config/cloudinary");
+const fs = require("fs");
 
 const updateController = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { name, fatherName, rollNumber, grade, formBay } = req.body;
+  try {
+    const { id } = req.params;
 
-        const updatedUser = await User.findByIdAndUpdate(id, {
-            name,
-            fatherName,
-            rollNumber,
-            grade,
-            formBay
-        }, { new: true }); // Use { new: true } to return the updated document
+    const { name, fatherName, rollNumber, grade, formBay } = req.body;
 
-        if (!updatedUser) {
-            return res.status(404).json({ message: "User not found" });
-        }
+    let imageUrl = "";
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "uploads",
+      });
 
-        res.status(200).json({
-            message: "User updated successfully",
-        });
-    } catch (error) {
-        console.error("Something went wrong:", error); // Log the error
-        res.status(500).json({ message: "Internal Server Error" });
+      imageUrl = result.secure_url;
+
+      fs.unlinkSync(req.file.path);
     }
+
+    const newUser = await User.findByIdAndUpdate(id, {
+      name,
+      fatherName,
+      rollNumber,
+      grade,
+      formBay,
+      image: imageUrl,
+    });
+
+    res.status(201).json({
+      message: "User updated successfully",
+      user: newUser,
+    });
+  } catch (error) {
+    console.error("Something went wrong:", error);
+    res.status(500).json({
+      message: "Failed to register user",
+      error: error.message,
+    });
+  }
 };
 
-// Set up the route to handle file uploads
-const update = express.Router();
-update.put("/update/:id", upload.single('image'), updateController); // 'image' matches the field name in FormData
-
-module.exports = update;
+module.exports = updateController;
