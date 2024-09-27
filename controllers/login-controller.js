@@ -1,10 +1,8 @@
 const User = require("../models/register-model");
-const cloudinary = require("../config/cloudinary");
-const fs = require("fs");
 
-const registerController = async (req, res) => {
+const loginController = async (req, res) => {
     try {
-        const { name, email, password, fatherName, rollNumber, grade, formBay } = req.body;
+        const { name, fatherName, rollNumber, grade, formBay } = req.body;
 
         let imageUrl = "";
         if (req.file) {
@@ -19,8 +17,6 @@ const registerController = async (req, res) => {
 
         const newUser = await User.create({
             name,
-            email,
-            password,
             fatherName,
             rollNumber,
             grade,
@@ -41,4 +37,4 @@ const registerController = async (req, res) => {
     }
 };
 
-module.exports = registerController;
+module.exports = loginController;
