@@ -6,6 +6,7 @@ const update = require("./router/update-router");
 const deleteUser = require("./router/delete-router");
 const getUser = require("./router/get-router");
 const getAllUser = require("./router/getAll-router");
+const login = require("./router/login-router");
 const connection = require("./db/connection");
 const cors = require("cors");
 
@@ -23,6 +24,7 @@ app.use("/api", update);
 app.use("/api", deleteUser);
 app.use("/api", getUser);
 app.use("/api", getAllUser);
+app.use("/api", login);
 
 
 const port = process.env.PORT;
