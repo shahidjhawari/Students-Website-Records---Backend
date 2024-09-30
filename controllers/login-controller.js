@@ -1,5 +1,6 @@
 const User = require("../models/register-model");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs"); 
 
 const loginController = async (req, res) => {
     try {
@@ -10,13 +11,15 @@ const loginController = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        if (password !== user.password) {
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
             return res.status(401).json({ message: "Invalid password" });
         }
 
         const token = jwt.sign(
             { id: user._id, email: user.email },
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" } 
         );
 
         res.status(200).json({
@@ -25,7 +28,7 @@ const loginController = async (req, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                token : token
+                token: token
             }
         });
     } catch (error) {

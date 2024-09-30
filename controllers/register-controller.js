@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const User = require("../models/register-model");
 const cloudinary = require("../config/cloudinary");
 const fs = require("fs");
@@ -17,10 +18,12 @@ const registerController = async (req, res) => {
             fs.unlinkSync(req.file.path);
         }
 
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const newUser = await User.create({
             name,
             email,
-            password,
+            password: hashedPassword,
             fatherName,
             rollNumber,
             grade,
