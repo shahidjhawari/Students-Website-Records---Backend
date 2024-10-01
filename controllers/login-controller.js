@@ -24,11 +24,11 @@ const loginController = async (req, res) => {
 
         res.status(200).json({
             message: "Login successful",
+            token: token, // Include token directly here
             user: {
                 id: user._id,
                 name: user.name,
-                email: user.email,
-                token: token
+                email: user.email
             }
         });
     } catch (error) {
