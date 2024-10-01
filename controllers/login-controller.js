@@ -24,7 +24,7 @@ const loginController = async (req, res) => {
 
         res.status(200).json({
             message: "Login successful",
-            token: token, // Include token directly here
+            token: token,
             user: {
                 id: user._id,
                 name: user.name,
