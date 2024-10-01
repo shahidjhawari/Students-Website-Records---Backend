@@ -1,12 +1,12 @@
+const bcrypt = require("bcryptjs");
 const User = require("../models/register-model");
 const cloudinary = require("../config/cloudinary");
 const fs = require("fs");
 
 const updateController = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const { name, fatherName, rollNumber, grade, formBay } = req.body;
+    const userId = req.user.id;
+    const { name, fatherName, rollNumber, grade, formBay, email, password } = req.body;
 
     let imageUrl = "";
     if (req.file) {
@@ -19,23 +19,35 @@ const updateController = async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
-    const newUser = await User.findByIdAndUpdate(id, {
+    const updatedFields = {
       name,
       fatherName,
       rollNumber,
       grade,
       formBay,
-      image: imageUrl,
-    });
+      email,
+    };
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      updatedFields.password = hashedPassword;
+    }
+
+    if (imageUrl) {
+      updatedFields.image = imageUrl;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedFields, { new: true });
 
     res.status(201).json({
       message: "User updated successfully",
-      user: newUser,
+      user: updatedUser,
     });
   } catch (error) {
     console.error("Something went wrong:", error);
     res.status(500).json({
-      message: "Failed to register user",
+      message: "Failed to update user",
       error: error.message,
     });
   }
