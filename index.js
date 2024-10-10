@@ -29,6 +29,9 @@ app.use("/api", getUser);
 app.use("/api", getAllUser);
 app.use("/api", login);
 
+app.get("/", (req, res) => {
+  res.send("Welcome to Server")
+})
 
 const port = process.env.PORT;
 
