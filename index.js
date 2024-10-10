@@ -20,6 +20,7 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', "PATCH"],
 };
 
+
 app.use(express.json());
 app.use("/api", router);
 app.use("/api", update);
